@@ -1,0 +1,2876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETHEOS — Philosophy for the Modern Soul</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Instrument+Sans:wght@400;500;600;700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400;1,6..96,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --obsidian: #0a0a0a;
+            --onyx: #0f0f0f;
+            --graphite: #171717;
+            --charcoal: #222222;
+            --slate: #3a3a3a;
+            --pewter: #666666;
+            --silver: #999999;
+            --ash: #bbbbbb;
+            --pearl: #e8e4df;
+            --ivory: #f5f2ed;
+            --cream: #faf8f5;
+            --gold: #c9a962;
+            --gold-light: #dbc287;
+            --gold-pale: #e8d4a8;
+            --gold-dark: #a68b4b;
+            --gold-glow: rgba(201, 169, 98, 0.12);
+            --gold-glow-intense: rgba(201, 169, 98, 0.22);
+            
+            --font-display: 'Bodoni Moda', serif;
+            --font-heading: 'Cormorant Garamond', serif;
+            --font-accent: 'Playfair Display', serif;
+            --font-body: 'Instrument Sans', sans-serif;
+            
+            --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-power4: cubic-bezier(0.76, 0, 0.24, 1);
+            --ease-elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--obsidian);
+            color: var(--pearl);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        body.loading {
+            overflow: hidden;
+        }
+
+        body.menu-open {
+            overflow: hidden;
+        }
+
+        /* Smooth Scroll Container */
+        .smooth-scroll {
+            will-change: transform;
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--obsidian);
+            z-index: 100000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preloader.done {
+            pointer-events: none;
+        }
+
+        .preloader-content {
+            text-align: center;
+        }
+
+        .preloader-logo {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            letter-spacing: 0.5em;
+            color: var(--gold);
+            margin-bottom: 3rem;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        .preloader-logo .char {
+            display: inline-block;
+            transform: translateY(120%);
+            opacity: 0;
+        }
+
+        .preloader-counter {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            letter-spacing: 0.3em;
+            color: var(--pewter);
+            margin-bottom: 2rem;
+        }
+
+        .preloader-bar {
+            width: 300px;
+            height: 1px;
+            background: var(--charcoal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preloader-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: var(--gold);
+            width: 0%;
+        }
+
+        .preloader-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--obsidian);
+            transform: scaleY(1);
+            transform-origin: top;
+        }
+
+        /* Custom Cursor */
+        .cursor-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99998;
+        }
+
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            mix-blend-mode: difference;
+            transition: width 0.4s var(--ease-expo), height 0.4s var(--ease-expo), border-width 0.4s;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor.hover {
+            width: 80px;
+            height: 80px;
+            border-width: 1px;
+        }
+
+        .cursor.click {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-dot {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-text {
+            position: fixed;
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            pointer-events: none;
+            z-index: 99999;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
+        }
+
+        .cursor-text.visible {
+            opacity: 1;
+        }
+
+        /* Noise Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10000;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--gold);
+            color: var(--obsidian);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.6s var(--ease-expo);
+        }
+
+        nav.scrolled {
+            padding: 1.2rem 4rem;
+            background: rgba(10, 10, 10, 0.92);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            letter-spacing: 0.45em;
+            font-weight: 400;
+            color: var(--ivory);
+            text-decoration: none;
+            position: relative;
+            z-index: 1001;
+        }
+
+        .nav-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--ash);
+            text-decoration: none;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.4s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s var(--ease-expo);
+        }
+
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-cta {
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--obsidian);
+            background: var(--gold);
+            padding: 0.8rem 1.8rem;
+            text-decoration: none;
+            transition: all 0.4s var(--ease-expo);
+        }
+
+        .nav-cta:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+        }
+
+        /* Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 7px;
+            cursor: pointer;
+            z-index: 1001;
+            padding: 10px;
+            position: relative;
+        }
+
+        .menu-toggle span {
+            width: 30px;
+            height: 1px;
+            background: var(--ivory);
+            transition: all 0.5s var(--ease-expo);
+            transform-origin: center;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Full Screen Menu */
+        .fullscreen-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--obsidian);
+            z-index: 999;
+            display: flex;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s var(--ease-expo);
+        }
+
+        .fullscreen-menu.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem 8rem;
+        }
+
+        .menu-links {
+            list-style: none;
+        }
+
+        .menu-links li {
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .menu-links a {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: var(--ivory);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: baseline;
+            gap: 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.8s var(--ease-expo), color 0.3s;
+            line-height: 1.2;
+        }
+
+        .fullscreen-menu.active .menu-links a {
+            transform: translateY(0);
+        }
+
+        .menu-links li:nth-child(1) a { transition-delay: 0.1s; }
+        .menu-links li:nth-child(2) a { transition-delay: 0.15s; }
+        .menu-links li:nth-child(3) a { transition-delay: 0.2s; }
+        .menu-links li:nth-child(4) a { transition-delay: 0.25s; }
+        .menu-links li:nth-child(5) a { transition-delay: 0.3s; }
+
+        .menu-links a:hover {
+            color: var(--gold);
+        }
+
+        .menu-links .menu-number {
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            opacity: 0.6;
+        }
+
+        .menu-right {
+            width: 40%;
+            background: var(--graphite);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 4rem;
+        }
+
+        .menu-info {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s var(--ease-expo) 0.4s;
+        }
+
+        .fullscreen-menu.active .menu-info {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .menu-info h4 {
+            font-family: var(--font-body);
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .menu-info p {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: var(--silver);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .menu-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .menu-social a {
+            width: 45px;
+            height: 45px;
+            border: 1px solid var(--charcoal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--silver);
+            font-size: 0.7rem;
+            text-decoration: none;
+            transition: all 0.4s var(--ease-expo);
+        }
+
+        .menu-social a:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse 120% 70% at 50% 35%, var(--gold-glow-intense) 0%, transparent 55%),
+                radial-gradient(ellipse 100% 120% at 15% 80%, rgba(184, 134, 11, 0.08) 0%, transparent 45%),
+                radial-gradient(ellipse 80% 100% at 90% 10%, rgba(201, 169, 98, 0.06) 0%, transparent 45%);
+        }
+
+        .hero-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(201, 169, 98, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(201, 169, 98, 0.03) 1px, transparent 1px);
+            background-size: 100px 100px;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 0%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 0%, transparent 70%);
+        }
+
+        .hero-orb {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
+            filter: blur(60px);
+            animation: orbFloat 15s ease-in-out infinite;
+        }
+
+        .hero-orb-1 {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .hero-orb-2 {
+            bottom: 10%;
+            right: 10%;
+            animation-delay: -7s;
+            opacity: 0.5;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(0, -50px) scale(1); }
+            75% { transform: translate(-30px, -20px) scale(0.95); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            max-width: 1400px;
+        }
+
+        .hero-eyebrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+        }
+
+        .hero-eyebrow-line {
+            width: 60px;
+            height: 1px;
+            background: var(--gold);
+            opacity: 0.5;
+        }
+
+        .hero-eyebrow-text {
+            font-family: var(--font-body);
+            font-size: 0.6rem;
+            letter-spacing: 0.6em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(5rem, 20vw, 18rem);
+            font-weight: 400;
+            line-height: 0.85;
+            letter-spacing: 0.06em;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .hero-title-wrapper {
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .hero-title .char {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--ivory) 0%, var(--gold-light) 35%, var(--gold) 65%, var(--pearl) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: gradientShift 6s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-divider {
+            width: 1px;
+            height: 80px;
+            background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+            margin: 2rem auto;
+            opacity: 0;
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-heading);
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            font-weight: 300;
+            font-style: italic;
+            color: var(--silver);
+            max-width: 600px;
+            margin: 0 auto 3.5rem;
+            opacity: 0;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+        }
+
+        .magnetic-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 1.4rem 3rem;
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.4s var(--ease-expo);
+        }
+
+        .magnetic-btn-primary {
+            color: var(--obsidian);
+            background: var(--gold);
+            border: none;
+        }
+
+        .magnetic-btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gold-light);
+            transform: translateY(100%);
+            transition: transform 0.5s var(--ease-expo);
+        }
+
+        .magnetic-btn-primary:hover::before {
+            transform: translateY(0);
+        }
+
+        .magnetic-btn-secondary {
+            color: var(--pearl);
+            background: transparent;
+            border: 1px solid var(--charcoal);
+        }
+
+        .magnetic-btn-secondary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--charcoal);
+            transform: translateY(100%);
+            transition: transform 0.5s var(--ease-expo);
+        }
+
+        .magnetic-btn-secondary:hover::before {
+            transform: translateY(0);
+        }
+
+        .magnetic-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .magnetic-btn svg {
+            width: 12px;
+            height: 12px;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.4s var(--ease-expo);
+        }
+
+        .magnetic-btn:hover svg {
+            transform: translateX(5px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0;
+        }
+
+        .scroll-mouse {
+            width: 24px;
+            height: 40px;
+            border: 1px solid var(--gold);
+            border-radius: 12px;
+            position: relative;
+            opacity: 0.6;
+        }
+
+        .scroll-mouse::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 2px;
+            animation: scrollWheel 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollWheel {
+            0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            50% { opacity: 0.3; transform: translateX(-50%) translateY(10px); }
+        }
+
+        .scroll-text {
+            font-size: 0.55rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--pewter);
+        }
+
+        /* Infinite Marquee */
+        .marquee-section {
+            padding: 3rem 0;
+            background: var(--graphite);
+            overflow: hidden;
+            border-top: 1px solid var(--charcoal);
+            border-bottom: 1px solid var(--charcoal);
+        }
+
+        .marquee-track {
+            display: flex;
+            animation: marquee 30s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .marquee-content {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            padding: 0 2rem;
+            flex-shrink: 0;
+        }
+
+        .marquee-item {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-style: italic;
+            color: var(--pearl);
+            white-space: nowrap;
+            opacity: 0.7;
+        }
+
+        .marquee-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 8rem 4rem;
+            background: var(--obsidian);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .stat-item::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 60%;
+            background: linear-gradient(to bottom, transparent, var(--charcoal), transparent);
+        }
+
+        .stat-item:last-child::after {
+            display: none;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 6vw, 5rem);
+            color: var(--gold);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .stat-label {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: var(--silver);
+            font-style: italic;
+        }
+
+        /* About Section */
+        .about {
+            padding: 12rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            gap: 10rem;
+            align-items: center;
+        }
+
+        .about-visual {
+            position: relative;
+        }
+
+        .about-image-stack {
+            position: relative;
+            aspect-ratio: 3/4;
+        }
+
+        .about-image {
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            background: linear-gradient(160deg, var(--graphite) 0%, var(--onyx) 100%);
+            overflow: hidden;
+        }
+
+        .about-image-1 {
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+
+        .about-image-2 {
+            bottom: 0;
+            right: 0;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 40%, var(--gold-glow) 100%);
+        }
+
+        .about-symbol {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-display);
+            font-size: 18rem;
+            color: var(--gold);
+            opacity: 0.06;
+            line-height: 1;
+        }
+
+        .about-frame {
+            position: absolute;
+            top: -30px;
+            left: -30px;
+            right: 30px;
+            bottom: 30px;
+            border: 1px solid var(--gold);
+            opacity: 0.15;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .about-badge {
+            position: absolute;
+            bottom: 10%;
+            right: -40px;
+            width: 140px;
+            height: 140px;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 4;
+            transform: rotate(-5deg);
+        }
+
+        .about-badge-icon {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            color: var(--obsidian);
+            line-height: 1;
+        }
+
+        .about-badge-text {
+            font-size: 0.5rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--obsidian);
+            opacity: 0.7;
+            margin-top: 0.3rem;
+        }
+
+        .about-content {
+            padding-left: 2rem;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.6rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 2.5rem;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 50px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .about-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 2.5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .about-title-accent {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .about-text {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: var(--silver);
+            line-height: 2;
+            margin-bottom: 2rem;
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--charcoal);
+        }
+
+        .about-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .about-feature-icon {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--gold);
+            flex-shrink: 0;
+            transform: rotate(45deg);
+        }
+
+        .about-feature-icon span {
+            transform: rotate(-45deg);
+        }
+
+        .about-feature-content h4 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .about-feature-content p {
+            font-family: var(--font-heading);
+            font-size: 0.95rem;
+            color: var(--pewter);
+        }
+
+        /* Principles Section */
+        .principles {
+            padding: 10rem 4rem 14rem;
+            background: var(--onyx);
+            position: relative;
+        }
+
+        .principles::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 6rem;
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.6rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 2rem;
+        }
+
+        .section-number::before,
+        .section-number::after {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
+            opacity: 0.4;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .section-subtitle {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: var(--silver);
+            font-style: italic;
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .principle-card {
+            background: linear-gradient(180deg, var(--graphite) 0%, var(--onyx) 100%);
+            padding: 4rem 3rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.7s var(--ease-expo);
+        }
+
+        .principle-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.7s var(--ease-expo);
+        }
+
+        .principle-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 0%, var(--gold-glow) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.7s var(--ease-expo);
+        }
+
+        .principle-card:hover {
+            transform: translateY(-20px);
+            border-color: rgba(201, 169, 98, 0.15);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .principle-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .principle-card:hover::after {
+            opacity: 1;
+        }
+
+        .principle-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .principle-icon {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .principle-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--gold);
+            transform: rotate(45deg);
+            opacity: 0.2;
+            transition: all 0.6s var(--ease-expo);
+        }
+
+        .principle-card:hover .principle-icon::before {
+            transform: rotate(45deg) scale(1.2);
+            opacity: 0.4;
+        }
+
+        .principle-number {
+            position: absolute;
+            top: 2.5rem;
+            right: 2.5rem;
+            font-family: var(--font-display);
+            font-size: 6rem;
+            color: var(--charcoal);
+            font-weight: 400;
+            line-height: 1;
+            transition: all 0.6s var(--ease-expo);
+            z-index: 0;
+        }
+
+        .principle-card:hover .principle-number {
+            color: var(--slate);
+            transform: scale(1.1) translate(5px, -5px);
+        }
+
+        .principle-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .principle-text {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--silver);
+            line-height: 1.9;
+        }
+
+        /* Wisdom Quote Section */
+        .wisdom {
+            padding: 12rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wisdom-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, var(--gold-glow-intense) 0%, transparent 55%);
+            pointer-events: none;
+        }
+
+        .wisdom-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+        }
+
+        .wisdom-line {
+            position: absolute;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+            opacity: 0.05;
+        }
+
+        .wisdom-line:nth-child(1) { left: 20%; }
+        .wisdom-line:nth-child(2) { left: 40%; }
+        .wisdom-line:nth-child(3) { left: 60%; }
+        .wisdom-line:nth-child(4) { left: 80%; }
+
+        .wisdom-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .wisdom-icon {
+            font-family: var(--font-display);
+            font-size: 5rem;
+            color: var(--gold);
+            opacity: 0.25;
+            margin-bottom: 3rem;
+        }
+
+        .wisdom-quote {
+            font-family: var(--font-display);
+            font-size: clamp(1.6rem, 4vw, 2.8rem);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.6;
+            margin-bottom: 3rem;
+            letter-spacing: 0.01em;
+        }
+
+        .wisdom-author {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .wisdom-author-name {
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .wisdom-author-title {
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--pewter);
+        }
+
+        /* Offerings Section */
+        .offerings {
+            padding: 10rem 4rem 12rem;
+            background: var(--graphite);
+        }
+
+        .offerings-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .offering-card {
+            padding: 4rem 3rem;
+            border: 1px solid var(--charcoal);
+            margin: -1px 0 0 -1px;
+            position: relative;
+            transition: all 0.6s var(--ease-expo);
+            cursor: pointer;
+        }
+
+        .offering-card:hover {
+            background: var(--charcoal);
+            z-index: 10;
+        }
+
+        .offering-number {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            opacity: 0.6;
+        }
+
+        .offering-title {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            transition: color 0.4s;
+        }
+
+        .offering-card:hover .offering-title {
+            color: var(--gold);
+        }
+
+        .offering-text {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            color: var(--silver);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .offering-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--pearl);
+            text-decoration: none;
+            transition: all 0.4s;
+        }
+
+        .offering-link:hover {
+            color: var(--gold);
+        }
+
+        .offering-link svg {
+            width: 10px;
+            height: 10px;
+            transition: transform 0.4s;
+        }
+
+        .offering-link:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Thinkers Section */
+        .thinkers {
+            padding: 10rem 4rem;
+            background: var(--obsidian);
+        }
+
+        .thinkers-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .thinker-card {
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .thinker-image {
+            aspect-ratio: 3/4;
+            background: var(--graphite);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.6s var(--ease-expo);
+        }
+
+        .thinker-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, var(--obsidian) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .thinker-initial {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-display);
+            font-size: 5rem;
+            color: var(--gold);
+            opacity: 0.15;
+            transition: all 0.6s var(--ease-expo);
+        }
+
+        .thinker-card:hover .thinker-initial {
+            opacity: 0.3;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .thinker-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            z-index: 2;
+        }
+
+        .thinker-name {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .thinker-title {
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--pewter);
+        }
+
+        .thinker-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.5s var(--ease-expo);
+        }
+
+        .thinker-card:hover .thinker-overlay {
+            opacity: 0.95;
+        }
+
+        .thinker-overlay-text {
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--obsidian);
+        }
+
+        /* Newsletter Section */
+        .newsletter {
+            padding: 12rem 4rem;
+            background: var(--onyx);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .newsletter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .newsletter-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--gold-glow) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .newsletter-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .newsletter-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2.5rem;
+            border: 1px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--gold);
+            transform: rotate(45deg);
+        }
+
+        .newsletter-icon span {
+            transform: rotate(-45deg);
+        }
+
+        .newsletter-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .newsletter-text {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 300;
+            color: var(--silver);
+            margin-bottom: 3rem;
+            font-style: italic;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 1.4rem 2rem;
+            background: var(--graphite);
+            border: 1px solid var(--charcoal);
+            border-right: none;
+            color: var(--pearl);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            transition: all 0.5s var(--ease-expo);
+        }
+
+        .newsletter-input::placeholder {
+            color: var(--pewter);
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: var(--charcoal);
+        }
+
+        .newsletter-btn {
+            padding: 1.4rem 2.5rem;
+            background: var(--gold);
+            border: 1px solid var(--gold);
+            color: var(--obsidian);
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.5s var(--ease-expo);
+            white-space: nowrap;
+        }
+
+        .newsletter-btn:hover {
+            background: var(--gold-light);
+            border-color: var(--gold-light);
+        }
+
+        .newsletter-note {
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--pewter);
+        }
+
+        /* Footer */
+        footer {
+            padding: 10rem 4rem 3rem;
+            background: var(--obsidian);
+            position: relative;
+        }
+
+        .footer-main {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 4rem;
+            max-width: 1500px;
+            margin: 0 auto 6rem;
+        }
+
+        .footer-brand {
+            max-width: 350px;
+        }
+
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            letter-spacing: 0.4em;
+            color: var(--ivory);
+            margin-bottom: 2rem;
+        }
+
+        .footer-tagline {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--silver);
+            line-height: 1.9;
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-social a {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--charcoal);
+            color: var(--silver);
+            text-decoration: none;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            transition: all 0.5s var(--ease-expo);
+        }
+
+        .footer-social a:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            transform: translateY(-4px);
+        }
+
+        .footer-column h4 {
+            font-family: var(--font-body);
+            font-size: 0.6rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-column a {
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            color: var(--silver);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .footer-column a::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.4s var(--ease-expo);
+        }
+
+        .footer-column a:hover {
+            color: var(--pearl);
+        }
+
+        .footer-column a:hover::after {
+            width: 100%;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 3rem;
+            border-top: 1px solid var(--graphite);
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .footer-copyright {
+            font-size: 0.75rem;
+            color: var(--pewter);
+            letter-spacing: 0.05em;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .footer-legal a {
+            font-size: 0.7rem;
+            color: var(--pewter);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            transition: color 0.3s;
+        }
+
+        .footer-legal a:hover {
+            color: var(--gold);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 3rem;
+            right: 3rem;
+            width: 50px;
+            height: 50px;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s var(--ease-expo);
+            z-index: 100;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--gold-light);
+            transform: translateY(-5px);
+        }
+
+        .back-to-top svg {
+            width: 16px;
+            height: 16px;
+            color: var(--obsidian);
+        }
+
+        /* Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 1.2s var(--ease-expo);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .about-grid {
+                gap: 6rem;
+            }
+
+            .offerings-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .thinkers-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-main {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 3rem;
+            }
+
+            .footer-brand {
+                grid-column: span 3;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            nav {
+                padding: 1.5rem 2rem;
+            }
+
+            nav.scrolled {
+                padding: 1rem 2rem;
+            }
+
+            .nav-center {
+                display: none;
+            }
+
+            .nav-cta {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 5rem;
+            }
+
+            .about-content {
+                padding-left: 0;
+                order: -1;
+            }
+
+            .principles-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat-item:nth-child(2)::after {
+                display: none;
+            }
+
+            .menu-right {
+                display: none;
+            }
+
+            .menu-left {
+                padding: 4rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .about,
+            .principles,
+            .wisdom,
+            .offerings,
+            .thinkers,
+            .newsletter {
+                padding: 6rem 1.5rem;
+            }
+
+            .stats {
+                padding: 5rem 1.5rem;
+            }
+
+            .hero {
+                padding: 1.5rem;
+            }
+
+            .offerings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .thinkers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .newsletter-input {
+                border-right: 1px solid var(--charcoal);
+                border-bottom: none;
+            }
+
+            .footer-main {
+                grid-template-columns: 1fr 1fr;
+                gap: 2.5rem;
+            }
+
+            .footer-brand {
+                grid-column: span 2;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .footer-legal {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1.5rem;
+            }
+
+            footer {
+                padding: 6rem 1.5rem 2rem;
+            }
+
+            .back-to-top {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                width: 44px;
+                height: 44px;
+            }
+
+            .menu-left {
+                padding: 6rem 2rem 4rem;
+            }
+
+            .menu-links a {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-cta-group {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .magnetic-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-item::after {
+                display: none;
+            }
+
+            .footer-main {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-brand {
+                grid-column: span 1;
+            }
+        }
+
+        /* Hide cursor on touch */
+        @media (hover: none) {
+            .cursor,
+            .cursor-dot,
+            .cursor-text {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="loading">
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-content">
+            <div class="preloader-logo" id="preloader-logo"></div>
+            <div class="preloader-counter" id="preloader-counter">0%</div>
+            <div class="preloader-bar">
+                <div class="preloader-progress" id="preloader-progress"></div>
+            </div>
+        </div>
+        <div class="preloader-overlay" id="preloader-overlay"></div>
+    </div>
+
+    <div class="noise-overlay"></div>
+    
+    <!-- Cursor -->
+    <div class="cursor-wrapper">
+        <div class="cursor" id="cursor"></div>
+        <div class="cursor-dot" id="cursor-dot"></div>
+        <div class="cursor-text" id="cursor-text">View</div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="nav">
+        <a href="#" class="logo">ETHEOS</a>
+        <div class="nav-center">
+            <ul class="nav-links">
+                <li><a href="#about">Philosophy</a></li>
+                <li><a href="#principles">Principles</a></li>
+                <li><a href="#offerings">Offerings</a></li>
+                <li><a href="#thinkers">Thinkers</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <a href="#newsletter" class="nav-cta">Join Us</a>
+            <div class="menu-toggle" id="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Fullscreen Menu -->
+    <div class="fullscreen-menu" id="fullscreen-menu">
+        <div class="menu-left">
+            <ul class="menu-links">
+                <li><a href="#about"><span class="menu-number">01</span>Philosophy</a></li>
+                <li><a href="#principles"><span class="menu-number">02</span>Principles</a></li>
+                <li><a href="#offerings"><span class="menu-number">03</span>Offerings</a></li>
+                <li><a href="#thinkers"><span class="menu-number">04</span>Thinkers</a></li>
+                <li><a href="#newsletter"><span class="menu-number">05</span>Connect</a></li>
+            </ul>
+        </div>
+        <div class="menu-right">
+            <div class="menu-info">
+                <h4>Get in Touch</h4>
+                <p>Join our community of seekers and philosophers exploring the depths of conscious living.</p>
+                <p>hello@etheos.com</p>
+                <div class="menu-social">
+                    <a href="#">IG</a>
+                    <a href="#">X</a>
+                    <a href="#">IN</a>
+                    <a href="#">YT</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        
+        <div class="hero-content">
+            <div class="hero-eyebrow" id="hero-eyebrow">
+                <span class="hero-eyebrow-line"></span>
+                <span class="hero-eyebrow-text">Philosophy for the Modern Soul</span>
+                <span class="hero-eyebrow-line"></span>
+            </div>
+            <h1 class="hero-title">
+                <span class="hero-title-wrapper" id="hero-title"></span>
+            </h1>
+            <div class="hero-divider" id="hero-divider"></div>
+            <p class="hero-subtitle" id="hero-subtitle">Where ancient wisdom meets contemporary consciousness. A sanctuary for those who seek meaning beyond the material world.</p>
+            <div class="hero-cta-group" id="hero-cta">
+                <a href="#about" class="magnetic-btn magnetic-btn-primary" data-magnetic>
+                    <span>Begin Your Journey</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="#offerings" class="magnetic-btn magnetic-btn-secondary" data-magnetic>
+                    <span>Explore Offerings</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        
+        <div class="scroll-indicator" id="scroll-indicator">
+            <div class="scroll-mouse"></div>
+            <span class="scroll-text">Scroll to Explore</span>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee-section">
+        <div class="marquee-track">
+            <div class="marquee-content">
+                <span class="marquee-item">Wisdom</span>
+                <span class="marquee-dot"></span>
+                <span class="marquee-item">Consciousness</span>
+                <span class="marquee-dot"></span>
+                <span class="marquee-item">Transcendence</span>
+                <span class="marquee-dot"></span>
+                <span class="marquee-item">Philosophy</span>
+                <span class="marquee-dot"></span>
+                <span class="marquee-item">Enlightenment</span>
+                <span class="marquee-dot"></span>
+                <span class="marquee-item">Awareness</span>
+                <span class="marquee-dot"></span>
+            </div>
+            <div class="marquee-content">
+                <span class="marquee-item">Wisdom</span>
+                <span class="marquee-dot"></span>
+                <span class="marquee-item">Consciousness</span>
+                <span class="marquee-dot"></span>
+                <span class="marquee-item">Transcendence</span>
+                <span class="marquee-dot"></span>
+                <span class="marquee-item">Philosophy</span>
+                <span class="marquee-dot"></span>
+                <span class="marquee-item">Enlightenment</span>
+                <span class="marquee-dot"></span>
+                <span class="marquee-item">Awareness</span>
+                <span class="marquee-dot"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item reveal">
+                <div class="stat-number" data-count="12">0</div>
+                <div class="stat-label">Years of Wisdom</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number" data-count="50">0</div>
+                <div class="stat-label">Teachings Published</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number" data-count="25">0</div>
+                <div class="stat-label">Global Communities</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number" data-count="10">0</div>
+                <div class="stat-label">Thousand Seekers</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-container">
+            <div class="about-grid">
+                <div class="about-visual reveal">
+                    <div class="about-image-stack">
+                        <div class="about-image about-image-1">
+                            <span class="about-symbol">Ε</span>
+                        </div>
+                        <div class="about-image about-image-2"></div>
+                        <div class="about-frame"></div>
+                        <div class="about-badge">
+                            <span class="about-badge-icon">∞</span>
+                            <span class="about-badge-text">Est. 2012</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-content reveal">
+                    <span class="section-label">01 — Our Essence</span>
+                    <h2 class="about-title">The Art of <span class="about-title-accent">Conscious</span> Living</h2>
+                    <p class="about-text">
+                        Etheos emerges from the Greek ἦθος (ethos) and θεός (theos) — the divine character that resides within all things. We believe that true wisdom is not inherited but cultivated through deliberate practice, deep reflection, and the courage to question everything.
+                    </p>
+                    <p class="about-text">
+                        In an age of constant distraction, we offer a return to the essential: a space where philosophy becomes not merely academic pursuit, but lived experience transformed into daily practice.
+                    </p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <div class="about-feature-icon"><span>Σ</span></div>
+                            <div class="about-feature-content">
+                                <h4>Ancient Wisdom</h4>
+                                <p>Drawing from millennia of philosophical tradition</p>
+                            </div>
+                        </div>
+                        <div class="about-feature">
+                            <div class="about-feature-icon"><span>Ψ</span></div>
+                            <div class="about-feature-content">
+                                <h4>Modern Practice</h4>
+                                <p>Adapted for contemporary consciousness</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Principles Section -->
+    <section class="principles" id="principles">
+        <div class="section-header reveal">
+            <span class="section-number">02 — Core Tenets</span>
+            <h2 class="section-title">The Three Pillars</h2>
+            <p class="section-subtitle">Every great philosophy rests upon foundational truths. These are ours.</p>
+        </div>
+        <div class="principles-grid">
+            <div class="principle-card reveal reveal-delay-1" data-tilt>
+                <span class="principle-number">I</span>
+                <div class="principle-content">
+                    <div class="principle-icon">Σ</div>
+                    <h3 class="principle-title">Sophia</h3>
+                    <p class="principle-text">
+                        The pursuit of wisdom not as accumulation of knowledge, but as the integration of understanding into every breath, every decision, every moment of existence.
+                    </p>
+                </div>
+            </div>
+            <div class="principle-card reveal reveal-delay-2" data-tilt>
+                <span class="principle-number">II</span>
+                <div class="principle-content">
+                    <div class="principle-icon">Ψ</div>
+                    <h3 class="principle-title">Psyche</h3>
+                    <p class="principle-text">
+                        The cultivation of the inner life — understanding the depths of consciousness, embracing shadow and light, becoming whole through radical self-inquiry.
+                    </p>
+                </div>
+            </div>
+            <div class="principle-card reveal reveal-delay-3" data-tilt>
+                <span class="principle-number">III</span>
+                <div class="principle-content">
+                    <div class="principle-icon">Ω</div>
+                    <h3 class="principle-title">Praxis</h3>
+                    <p class="principle-text">
+                        Philosophy in action. Theory without practice is hollow; we transform understanding into embodied wisdom through deliberate, conscious engagement.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wisdom Quote -->
+    <section class="wisdom">
+        <div class="wisdom-bg"></div>
+        <div class="wisdom-lines">
+            <div class="wisdom-line"></div>
+            <div class="wisdom-line"></div>
+            <div class="wisdom-line"></div>
+            <div class="wisdom-line"></div>
+        </div>
+        <div class="wisdom-container reveal">
+            <div class="wisdom-icon">"</div>
+            <blockquote class="wisdom-quote">
+                Between stimulus and response there is a space. In that space is our power to choose our response. In our response lies our growth and our freedom.
+            </blockquote>
+            <div class="wisdom-author">
+                <span class="wisdom-author-name">Viktor E. Frankl</span>
+                <span class="wisdom-author-title">Man's Search for Meaning</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Offerings Section -->
+    <section class="offerings" id="offerings">
+        <div class="section-header reveal">
+            <span class="section-number">03 — Sacred Paths</span>
+            <h2 class="section-title">Our Offerings</h2>
+            <p class="section-subtitle">Multiple pathways to deepen your philosophical journey</p>
+        </div>
+        <div class="offerings-grid">
+            <div class="offering-card reveal">
+                <span class="offering-number">01</span>
+                <h3 class="offering-title">The Symposium</h3>
+                <p class="offering-text">Weekly gatherings for deep philosophical discourse and collective inquiry into life's fundamental questions.</p>
+                <a href="#" class="offering-link">
+                    Learn More
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="offering-card reveal">
+                <span class="offering-number">02</span>
+                <h3 class="offering-title">Mentorship Circle</h3>
+                <p class="offering-text">One-on-one guidance from experienced philosophers to support your personal transformation.</p>
+                <a href="#" class="offering-link">
+                    Learn More
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="offering-card reveal">
+                <span class="offering-number">03</span>
+                <h3 class="offering-title">The Library</h3>
+                <p class="offering-text">Curated collection of essential texts, commentaries, and original teachings spanning traditions.</p>
+                <a href="#" class="offering-link">
+                    Learn More
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="offering-card reveal">
+                <span class="offering-number">04</span>
+                <h3 class="offering-title">Retreats</h3>
+                <p class="offering-text">Immersive experiences in sacred spaces designed for contemplation and breakthrough.</p>
+                <a href="#" class="offering-link">
+                    Learn More
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="offering-card reveal">
+                <span class="offering-number">05</span>
+                <h3 class="offering-title">The Journal</h3>
+                <p class="offering-text">Quarterly publication featuring original essays, interviews, and philosophical explorations.</p>
+                <a href="#" class="offering-link">
+                    Learn More
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="offering-card reveal">
+                <span class="offering-number">06</span>
+                <h3 class="offering-title">Digital Courses</h3>
+                <p class="offering-text">Self-paced learning journeys through the great philosophical traditions and practices.</p>
+                <a href="#" class="offering-link">
+                    Learn More
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Thinkers Section -->
+    <section class="thinkers" id="thinkers">
+        <div class="section-header reveal">
+            <span class="section-number">04 — Guides</span>
+            <h2 class="section-title">Our Thinkers</h2>
+            <p class="section-subtitle">Wisdom keepers and philosophical guides</p>
+        </div>
+        <div class="thinkers-grid">
+            <div class="thinker-card reveal" data-cursor="View Profile">
+                <div class="thinker-image">
+                    <span class="thinker-initial">M</span>
+                </div>
+                <div class="thinker-content">
+                    <h3 class="thinker-name">Dr. Marcus Chen</h3>
+                    <p class="thinker-title">Eastern Philosophy</p>
+                </div>
+                <div class="thinker-overlay">
+                    <span class="thinker-overlay-text">View Profile</span>
+                </div>
+            </div>
+            <div class="thinker-card reveal" data-cursor="View Profile">
+                <div class="thinker-image">
+                    <span class="thinker-initial">E</span>
+                </div>
+                <div class="thinker-content">
+                    <h3 class="thinker-name">Elena Vasquez</h3>
+                    <p class="thinker-title">Consciousness Studies</p>
+                </div>
+                <div class="thinker-overlay">
+                    <span class="thinker-overlay-text">View Profile</span>
+                </div>
+            </div>
+            <div class="thinker-card reveal" data-cursor="View Profile">
+                <div class="thinker-image">
+                    <span class="thinker-initial">A</span>
+                </div>
+                <div class="thinker-content">
+                    <h3 class="thinker-name">Prof. Amir Hassan</h3>
+                    <p class="thinker-title">Comparative Philosophy</p>
+                </div>
+                <div class="thinker-overlay">
+                    <span class="thinker-overlay-text">View Profile</span>
+                </div>
+            </div>
+            <div class="thinker-card reveal" data-cursor="View Profile">
+                <div class="thinker-image">
+                    <span class="thinker-initial">S</span>
+                </div>
+                <div class="thinker-content">
+                    <h3 class="thinker-name">Sarah Lindström</h3>
+                    <p class="thinker-title">Ethics & Practice</p>
+                </div>
+                <div class="thinker-overlay">
+                    <span class="thinker-overlay-text">View Profile</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter" id="newsletter">
+        <div class="newsletter-bg"></div>
+        <div class="newsletter-container reveal">
+            <div class="newsletter-icon"><span>✦</span></div>
+            <h2 class="newsletter-title">Join the Symposium</h2>
+            <p class="newsletter-text">
+                Receive weekly contemplations, curated wisdom, and invitations to explore the depths of conscious living.
+            </p>
+            <form class="newsletter-form" id="newsletter-form">
+                <input type="email" class="newsletter-input" placeholder="Enter your email" required>
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+            <p class="newsletter-note">Join 10,000+ seekers. Unsubscribe anytime.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-main">
+            <div class="footer-brand">
+                <div class="footer-logo">ETHEOS</div>
+                <p class="footer-tagline">
+                    Philosophy for the modern soul. Ancient wisdom, contemporary consciousness, timeless truth.
+                </p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Instagram">IG</a>
+                    <a href="#" aria-label="Twitter">X</a>
+                    <a href="#" aria-label="LinkedIn">IN</a>
+                    <a href="#" aria-label="YouTube">YT</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="#">Philosophy</a></li>
+                    <li><a href="#">Teachings</a></li>
+                    <li><a href="#">Library</a></li>
+                    <li><a href="#">Journal</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Community</h4>
+                <ul>
+                    <li><a href="#">Symposium</a></li>
+                    <li><a href="#">Events</a></li>
+                    <li><a href="#">Mentorship</a></li>
+                    <li><a href="#">Circle</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Reading List</a></li>
+                    <li><a href="#">Meditations</a></li>
+                    <li><a href="#">Podcast</a></li>
+                    <li><a href="#">Store</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="footer-copyright">© 2026 Etheos. All rights reserved.</p>
+            <div class="footer-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Preferences</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <div class="back-to-top" id="back-to-top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+    </div>
+
+    <script>
+        // ========== PRELOADER ==========
+        const preloaderLogo = document.getElementById('preloader-logo');
+        const preloaderCounter = document.getElementById('preloader-counter');
+        const preloaderProgress = document.getElementById('preloader-progress');
+        const preloaderOverlay = document.getElementById('preloader-overlay');
+        const preloader = document.getElementById('preloader');
+        
+        // Create logo characters
+        const logoText = 'ETHEOS';
+        logoText.split('').forEach((char, i) => {
+            const span = document.createElement('span');
+            span.className = 'char';
+            span.textContent = char;
+            preloaderLogo.appendChild(span);
+        });
+
+        // Animate preloader
+        let progress = 0;
+        const loadInterval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress > 100) progress = 100;
+            
+            preloaderCounter.textContent = Math.floor(progress) + '%';
+            preloaderProgress.style.width = progress + '%';
+            
+            if (progress === 100) {
+                clearInterval(loadInterval);
+                setTimeout(finishLoading, 500);
+            }
+        }, 100);
+
+        // Animate logo chars
+        setTimeout(() => {
+            preloaderLogo.querySelectorAll('.char').forEach((char, i) => {
+                setTimeout(() => {
+                    char.style.transform = 'translateY(0)';
+                    char.style.opacity = '1';
+                }, i * 80);
+            });
+        }, 200);
+
+        function finishLoading() {
+            preloaderOverlay.style.transform = 'scaleY(0)';
+            preloaderOverlay.style.transformOrigin = 'bottom';
+            preloaderOverlay.style.transition = 'transform 1s cubic-bezier(0.76, 0, 0.24, 1)';
+            
+            setTimeout(() => {
+                preloader.classList.add('done');
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+                document.body.classList.remove('loading');
+                animateHero();
+            }, 800);
+        }
+
+        // ========== HERO ANIMATIONS ==========
+        function animateHero() {
+            const heroTitle = document.getElementById('hero-title');
+            const heroEyebrow = document.getElementById('hero-eyebrow');
+            const heroDivider = document.getElementById('hero-divider');
+            const heroSubtitle = document.getElementById('hero-subtitle');
+            const heroCta = document.getElementById('hero-cta');
+            const scrollIndicator = document.getElementById('scroll-indicator');
+            
+            // Title character animation
+            const titleText = 'ETHEOS';
+            titleText.split('').forEach((char, i) => {
+                const span = document.createElement('span');
+                span.className = 'char';
+                span.textContent = char;
+                span.style.opacity = '0';
+                span.style.transform = 'translateY(100%)';
+                span.style.display = 'inline-block';
+                heroTitle.appendChild(span);
+            });
+
+            // Staggered animations
+            setTimeout(() => {
+                heroEyebrow.style.opacity = '1';
+                heroEyebrow.style.transition = 'opacity 1s cubic-bezier(0.16, 1, 0.3, 1)';
+            }, 200);
+
+            heroTitle.querySelectorAll('.char').forEach((char, i) => {
+                setTimeout(() => {
+                    char.style.opacity = '1';
+                    char.style.transform = 'translateY(0)';
+                    char.style.transition = 'all 1.2s cubic-bezier(0.16, 1, 0.3, 1)';
+                }, 400 + i * 100);
+            });
+
+            setTimeout(() => {
+                heroDivider.style.opacity = '1';
+                heroDivider.style.transition = 'opacity 1s';
+            }, 1000);
+
+            setTimeout(() => {
+                heroSubtitle.style.opacity = '1';
+                heroSubtitle.style.transition = 'opacity 1s';
+            }, 1200);
+
+            setTimeout(() => {
+                heroCta.style.opacity = '1';
+                heroCta.style.transition = 'opacity 1s';
+            }, 1400);
+
+            setTimeout(() => {
+                scrollIndicator.style.opacity = '1';
+                scrollIndicator.style.transition = 'opacity 1s';
+            }, 1600);
+        }
+
+        // ========== CUSTOM CURSOR ==========
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorText = document.getElementById('cursor-text');
+        
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let dotX = 0, dotY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            // Smooth follow for main cursor
+            cursorX += (mouseX - cursorX) * 0.12;
+            cursorY += (mouseY - cursorY) * 0.12;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            
+            // Faster follow for dot
+            dotX += (mouseX - dotX) * 0.25;
+            dotY += (mouseY - dotY) * 0.25;
+            cursorDot.style.left = dotX + 'px';
+            cursorDot.style.top = dotY + 'px';
+            
+            // Cursor text follows main cursor
+            cursorText.style.left = cursorX + 'px';
+            cursorText.style.top = (cursorY - 40) + 'px';
+            
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Cursor interactions
+        const hoverElements = document.querySelectorAll('a, button, .principle-card, .offering-card, .thinker-card, .menu-toggle, [data-magnetic]');
+        
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+                
+                // Show cursor text for specific elements
+                if (el.dataset.cursor) {
+                    cursorText.textContent = el.dataset.cursor;
+                    cursorText.classList.add('visible');
+                }
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+                cursorText.classList.remove('visible');
+            });
+        });
+
+        document.addEventListener('mousedown', () => cursor.classList.add('click'));
+        document.addEventListener('mouseup', () => cursor.classList.remove('click'));
+
+        // ========== MAGNETIC BUTTONS ==========
+        document.querySelectorAll('[data-magnetic]').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+            });
+        });
+
+        // ========== 3D TILT EFFECT ==========
+        document.querySelectorAll('[data-tilt]').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-20px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+
+        // ========== NAVIGATION ==========
+        const nav = document.getElementById('nav');
+        const menuToggle = document.getElementById('menu-toggle');
+        const fullscreenMenu = document.getElementById('fullscreen-menu');
+        const menuLinks = document.querySelectorAll('.menu-links a, .nav-links a');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            fullscreenMenu.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+        });
+
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                fullscreenMenu.classList.remove('active');
+                document.body.classList.remove('menu-open');
+            });
+        });
+
+        // ========== SCROLL REVEAL ==========
+        const reveals = document.querySelectorAll('.reveal');
+        
+        function revealOnScroll() {
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const revealTop = el.getBoundingClientRect().top;
+                const revealPoint = 100;
+
+                if (revealTop < windowHeight - revealPoint) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', revealOnScroll);
+        setTimeout(revealOnScroll, 100);
+
+        // ========== COUNTER ANIMATION ==========
+        const counters = document.querySelectorAll('[data-count]');
+        let counterAnimated = false;
+
+        function animateCounters() {
+            if (counterAnimated) return;
+            
+            const statsSection = document.querySelector('.stats');
+            const rect = statsSection.getBoundingClientRect();
+            
+            if (rect.top < window.innerHeight - 100) {
+                counterAnimated = true;
+                
+                counters.forEach(counter => {
+                    const target = parseInt(counter.dataset.count);
+                    const duration = 2000;
+                    const step = target / (duration / 16);
+                    let current = 0;
+                    
+                    const updateCounter = () => {
+                        current += step;
+                        if (current < target) {
+                            counter.textContent = Math.floor(current);
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            counter.textContent = target + (target === 10 ? 'K+' : '+');
+                        }
+                    };
+                    
+                    updateCounter();
+                });
+            }
+        }
+
+        window.addEventListener('scroll', animateCounters);
+
+        // ========== BACK TO TOP ==========
+        const backToTop = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ========== SMOOTH SCROLL ==========
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 80;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // ========== NEWSLETTER ==========
+        document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const input = document.querySelector('.newsletter-input');
+            const btn = document.querySelector('.newsletter-btn');
+            
+            btn.textContent = 'Welcome ✦';
+            input.value = '';
+            
+            setTimeout(() => {
+                btn.textContent = 'Subscribe';
+            }, 3000);
+        });
+
+        // ========== PARALLAX ==========
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            
+            document.querySelectorAll('.hero-orb').forEach(orb => {
+                orb.style.transform = `translate(0, ${scrolled * 0.15}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
